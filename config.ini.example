@@ -1,0 +1,66 @@
+# THIS IS YOUR API SERVER HTTP PORT, PUT IT BEHIND NGINX OR HAPROXY WITH SSL
+http-server-address = 0.0.0.0:8888
+
+# THIS IS YOUR P2P PORT AND IS ONLY TCP, DO NOT TRY TO PUT SSL IN FRONT OR USE AN HTTP PROXY WITH IT
+p2p-listen-endpoint = 0.0.0.0:9876
+
+# SET A LOGICAL NAME FOR THIS NODE
+agent-name = "OpenRepublic"
+
+# Directory configuration if you are splitting state/blocks/ship/trace...
+# note that state currently is not configurable and will be relative to the data-dir
+# blocks-dir=
+# state-history-dir=
+# trace-dir=
+
+wasm-runtime = eos-vm-jit
+
+# DO NOT ENABLE THESE ON A PRODUCER, they may be handy for making replays faster though!
+#eos-vm-oc-compile-threads = 4
+
+# This can be set as low as the configured RAM on the network,
+#   but should not be higher than the configured RAM on your server
+chain-state-db-size-mb = 65536
+# contracts-console = true
+access-control-allow-origin = *
+access-control-allow-headers = Origin, X-Requested-With, Content-Type, Accept
+verbose-http-errors = true
+http-validate-host = false
+abi-serializer-max-time-ms = 2000
+http-max-response-time-ms = 100000
+
+#this must be a high number behind a proxy, as all connections appear to come from the proxy host
+p2p-max-nodes-per-host = 100
+
+# UNCOMMENT AND SET PROPER VALUES FOR PRODUCER NODE
+producer-name = openrepublic
+signature-provider = <PRODUCER_PUBLIC_KEY>=KEY:<PRODUCER_PRIVATE_KEY>
+
+# PLUGINS
+plugin = eosio::http_plugin
+plugin = eosio::chain_api_plugin
+plugin = eosio::chain_plugin
+plugin = eosio::producer_plugin
+
+# DO NOT ENABLE NET OR PRODUCER API PLUGINS ON THE PUBLIC INTERNET
+# ONLY RUN IF YOU'RE BEHIND A PROXY THAT IS FILTERING THESE PATHS: /v1/producer/ /v1/net/
+# plugin = eosio::net_api_plugin
+# plugin = eosio::producer_api_plugin
+
+chain-threads = 6
+net-threads = 6
+http-threads = 6
+producer-threads = 6
+produce-block-offset-ms = 600
+
+# Peers:
+# nation.tlos: CA, Canada
+p2p-peer-address = telostest.seed.eosnation.io:9876
+# telosculture: CA, Montreal
+p2p-peer-address = telos-testnet-p2p.cultureblock.io:9874
+# teloskiwinzz: NZ, Auckland
+p2p-peer-address = telostestnet.bp.kiwi:9786
+# votetelosusa: US, Greenville,SC,USA
+p2p-peer-address = test.telos.p2p.eosusa.io:19876
+# caleos: US, California
+p2p-peer-address = testnet.telos.caleos.io:9879
